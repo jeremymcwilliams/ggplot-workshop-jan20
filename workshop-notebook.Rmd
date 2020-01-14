@@ -15,7 +15,7 @@ output:
 
 * Load and filter datasets as needed
 * Learn the basic elements of ggplot
-* 
+* Use a few statistical methods in R
 
 
 ### What is ggplot?
@@ -46,7 +46,12 @@ help(geom_jitter)
 
 As always, entering your question or error message into your favorite search engine is trypically a pretty effective way to get help. Chances are good that someone else has already encountered a ggplot problem you've encountered, and the answers are likely online.
 
+
+
 ### Sample plots
+
+
+
 
 Load data set
 ```{r}
@@ -58,20 +63,20 @@ babyNames
 
 
 
-Let's say were interested in how the number of female babies annually named Jane has changed over time. First we can use the "filter" function to get a subset of our data:
+Let's say were interested in how the number of female babies annually named Mary has changed over time. First we can use the "filter" function to get a subset of our data:
 ```{r}
 
-jane<-filter(.data=babyNames, (Name=="Jane" & Sex=="Girls"))
+mary<-filter(.data=babyNames, (Name=="Mary" & Sex=="Girls"))
 
 # print "jane" dataset
-jane
+mary
 
 ```
 
 
-Our "jane" variable now just has the count of "Janes" over time. Let's do a line plot to see the change over time. Here is the code we will run:
+Our "mary" variable now just has the count of "Marys" over time. Let's do a line plot to see the change over time. Here is the code we will run:
 
-ggplot(data=jane, mapping=aes(x=Year, y=Count))+geom_line()
+ggplot(data=mary, mapping=aes(x=Year, y=Count))+geom_line()
 
 Looking at the code, here's how we're including the three basic parts of a ggplot chart: 
 
@@ -82,7 +87,7 @@ Looking at the code, here's how we're including the three basic parts of a ggplo
 
 ```{r}
 
-ggplot(data=jane, mapping=aes(x=Year, y=Count))+geom_line()
+ggplot(data=mary, mapping=aes(x=Year, y=Count))+geom_line()
 
 
 ```
@@ -110,7 +115,7 @@ We can change our plot type:
 
 ```{r}
 
-ggplot(data=jane, aes(x=Year, y=Count))+geom_area()
+ggplot(data=mary, aes(x=Year, y=Count))+geom_area()
 
 ```
 
@@ -130,14 +135,14 @@ You can specify labels to add to your plot by using the "labs()" function:
 
 ```{r}
 
-ggplot(data=jane, aes(x=Year, y=Count))+geom_area()+labs(y="number of Janes", x="Over Time", title="Janes over time")
+ggplot(data=mary, aes(x=Year, y=Count))+geom_area()+labs(y="number of Marys", x="Over Time", title="Marys over time")
 
 ```
 
 Additionally you can add colors to the area:
 
 ```{r}
-ggplot(data=jane, aes(x=Year, y=Count))+geom_area(color = "black", fill = "blue")+labs(y="number of Janes", x="Over Time", title="Janes over time in blue!")
+ggplot(data=mary, aes(x=Year, y=Count))+geom_area(color = "black", fill = "blue")+labs(y="number of Marys", x="Over Time", title="Marys over time in blue!")
 
 
 ```
@@ -165,17 +170,20 @@ chickens<-as_tibble(chickwts)
 chickens
 ```
 
-This data is from a study in 1948 comparing the weights of chickens on different diets. Let's say we're interested in comparing the average weights of the chickens grouped by the type of diet, with the end goal of displaying the data in a bar chart. We can readily get our data in the format we need by using using the "pipe" operator, combined with group_by() and summarise(): 
+This data is from a study in 1948 comparing the weights of chickens on different diets. Let's say we're interested in comparing the average weights of the chickens grouped by the type of diet, with the end goal of displaying the data in a bar chart. We can readily get our data in the format we need by using using the "pipe" operator, combined with group_by() and summarise(). group_by() first lets us identify which field we want to group by, while summarise() then lets us calculate various statistical measures:
 
 ```{r}
-averageChickens<-chickens %>% group_by(feed) %>% summarise(avg=mean(weight))
+averageChickens<-chickens %>% 
+  group_by(feed) %>% 
+  summarise(avg=mean(weight), stdDev=sd(weight), n=n(), stdEr=sd(weight)/sqrt(n()))
 
 averageChickens
 ```
 
 What is happening here? The "%>%" (or "pipe") operator sort of means "pass this on to the next thing". It's a handy R convention for chaining functions together.  
 
-The "summarise" (a.k.a. "summarize") function, when combined with "group_by", is good for adding new statistical metrics for the groups. Like the function "mutate()", summarise creates a column - we're naming it "avg".
+The "summarise" (a.k.a. "summarize") function, when combined with "group_by", is good for adding new statistical metrics for the groups.
+
 
 Now we can take this data "averageChickens" and create a bar chart:
 
@@ -196,6 +204,99 @@ This seems fine, but we can make it a little better by adding some labels, and u
 ggplot(data=averageChickens, mapping=aes(x=feed, y=avg, fill=feed))+geom_bar(stat="identity")+labs(title="Average Chicken weight by Food Type", x="Food Type", y="Units of Weight", fill = "Food Type")
 
 # note that "fill" is an option in labs() - this gives a title to the legend
+
+```
+
+We can go a step further and add error bars to our bar chart. It's the same as above, except we add the "geom_errorbar" function, and give it some metrics. In this case, we'll say the error bars should range 1 standard deviation above and below the mean (hence the ymin and ymax values below).
+
+```{r}
+
+ggplot(data=averageChickens, mapping=aes(x=feed, y=avg, fill=feed))+geom_bar(stat="identity")+labs(title="Average Chicken weight by Food Type", x="Food Type", y="Units of Weight", fill = "Food Type")+geom_errorbar(mapping=aes(ymin=avg-stdDev, ymax=avg+stdDev, width=0.2))
+
+```
+
+
+YOUR TURN:
+
+Consider the iris dataset, which comes with base R.
+
+This famous (Fisher's or Anderson's) iris data set gives the measurements in centimeters of the variables sepal length and width and petal length and width, respectively, for 50 flowers from each of 3 species of iris. The species are Iris setosa, versicolor, and virginica.
+
+```{r}
+
+iris
+
+```
+
+
+Can you create a bar chart showing:
+* The mean Petal length by Species
+* Include error bars showing 1 standard deviation above and below the mean.
+* Each species should have a different color
+* Should be labeled appropriately (measure is in cm.)
+
+```{r}
+
+# first use group_by() and summarise() to generate a new data frame with desired statistics
+
+
+# next, use that data to create your bar chart
+
+
+
+
+```
+
+
+### Some statistics
+
+Let's try running a 1-way ANOVA on the chickwts dataset. 
+Null hypothesis: the means of the groups are the same
+Alternative hypothesis: at least one sample mean is not equal to the others
+
+
+
+Perhaps do the same with mpg?
+
+
+
+
+
+```{r}
+
+ggplot(data=chickwts, mapping=aes(x=feed, y=weight, fill=feed))+geom_boxplot()
+
+```
+
+
+
+
+
+```{r}
+
+Iris_summary <- iris %>% # the names of the new data frame and the data frame to be summarised
+  group_by(Species) %>%   # the grouping variable
+  summarise(mean_PL = mean(Petal.Length),  # calculates the mean of each group
+            sd_PL = sd(Petal.Length), # calculates the standard deviation of each group
+            n_PL = n(),  # calculates the sample size per group
+            SE_PL = sd(Petal.Length)/sqrt(n())) # calculates the standard error of each group
+
+Iris_summary
+
+```
+
+
+
+```{r}
+jpeg("rplot.jpg")
+
+IrisPlot <- ggplot(Iris_summary, aes(x=Species, y=mean_PL, fill=Species)) + 
+                   geom_col() +  
+                   geom_errorbar(aes(ymin = mean_PL - sd_PL, ymax = mean_PL + sd_PL), width=0.2)
+
+IrisPlot + labs(y="Petal length (cm) ± s.d.", x = "Species")
+
+dev.off()
 
 ```
 
@@ -240,7 +341,7 @@ To save your plot as a file, you can use the ggsave() function. ggsave will save
 
 ```{r}
 
-ggsave("plot.png", height=5, width=5)
+ggsave("plot.png", height=5, width=5, units="cm", scale=3)
 
 ```
 
