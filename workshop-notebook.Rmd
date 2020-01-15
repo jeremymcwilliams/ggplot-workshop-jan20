@@ -1,5 +1,5 @@
 ---
-title: "R Notebook"
+title: "Watzek Library ggplot workshop"
 output:
   pdf_document: default
   html_notebook: default
@@ -15,6 +15,7 @@ output:
 
 * Load and filter datasets as needed
 * Learn the basic elements of ggplot
+* Repeat!
 * Use a few statistical methods in R
 
 
@@ -48,9 +49,7 @@ As always, entering your question or error message into your favorite search eng
 
 
 
-### Sample plots
-
-
+### Baby Names data set
 
 
 Load data set
@@ -68,7 +67,7 @@ Let's say were interested in how the number of female babies annually named Mary
 
 mary<-filter(.data=babyNames, (Name=="Mary" & Sex=="Girls"))
 
-# print "jane" dataset
+# print "mary" dataset
 mary
 
 ```
@@ -80,7 +79,7 @@ ggplot(data=mary, mapping=aes(x=Year, y=Count))+geom_line()
 
 Looking at the code, here's how we're including the three basic parts of a ggplot chart: 
 
-* DATA - data=jane  
+* DATA - data=mary  
 * AESTHETICS - mapping=aes(x=Year, y=Count)  
 * GEOM - +geom_line()
 
@@ -129,7 +128,7 @@ Create an area plot of your name over time
 
 
 
-### Bells and Whistles
+### Labels & Colors
 
 You can specify labels to add to your plot by using the "labs()" function:
 
@@ -151,6 +150,96 @@ ggplot(data=mary, aes(x=Year, y=Count))+geom_area(color = "black", fill = "blue"
 YOUR TURN:
 Can you add some labels and color to your area plot?
 ```{r}
+
+
+```
+
+
+
+
+### Average Height by Country
+
+In the Files window to the right, you'll see a file called "average-height-of-men.csv". This is a dataset from NCD-Risc (http://www.ncdrisc.org/data-downloads.html) that has the average annual height of men by country from 1896-1996. Let's load this data below by createing a variable called "men". We can then take a look at the data by printing "men".
+
+```{r}
+
+men<-read_csv("average-height-of-men.csv")
+
+men
+
+```
+
+
+This dataset looks pretty straightforward. One small issue, though, is that the column name for height is a little much. To make our work easier down the road, let's rename the column header to something more manageable.
+
+
+
+```{r}
+#first, let's look at the column names:
+colnames(men)
+
+
+```
+
+```{r}
+# and let's rename it using the "names" function:
+names(men)[4]<-"Height"
+
+#print it out:
+men
+
+
+```
+
+
+
+Let's say we're interested in seeing any changes over time in the average height of men from the United States.
+
+
+
+```{r}
+usMen<-filter(.data=men, Entity=="United States")
+usMen
+
+```
+
+Now that we have a subset of data, let's create a line plot:
+
+```{r}
+
+ggplot(data=usMen, mapping=aes(x=Year, y=Height))+geom_line()
+
+# Now take a look at the ggplot cheat sheet. Try changing geom_line() to a different "geom". Any success?
+
+
+```
+
+
+Now let's compare multiple countries at once. 
+
+```{r}
+
+countries<-filter(.data=men, Entity=="United States" | Entity=="Mexico" | Entity=="Canada")
+countries
+
+
+ggplot(data=countries, mapping=aes(x=Year, y=Height, color=Entity))+geom_line()+labs(y="Average Height (cm)", title="Change in average height over time")
+
+
+```
+
+
+
+
+
+
+
+YOUR TURN:
+Use the "average-height-of-women.csv" dataset to generate a line graph plotting average height of women from five countries. .
+
+```{r}
+#enter code below
+
 
 
 ```
@@ -253,6 +342,15 @@ Can you create a bar chart showing:
 Let's try running a 1-way ANOVA on the chickwts dataset. 
 Null hypothesis: the means of the groups are the same
 Alternative hypothesis: at least one sample mean is not equal to the others
+
+```{r}
+
+# Compute the analysis of variance
+res.aov <- aov(weight ~ feed, data = chickens)
+# Summary of the analysis
+summary(res.aov)
+
+```
 
 
 
