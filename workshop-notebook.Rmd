@@ -305,6 +305,16 @@ ggplot(data=averageChickens, mapping=aes(x=feed, y=avg, fill=feed))+geom_bar(sta
 ```
 
 
+Alternately, we can show this as a box plot by using the original "chicken" data.
+
+```{r}
+
+ggplot(data=chickens, mapping=aes(x=feed, y=weight, fill=feed))+geom_boxplot()+geom_jitter(width=0.2)
+
+```
+
+
+
 YOUR TURN:
 
 Consider the iris dataset, which comes with base R.
