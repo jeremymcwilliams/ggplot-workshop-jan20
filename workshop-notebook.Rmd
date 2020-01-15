@@ -320,7 +320,7 @@ ggplot(data=chickens, mapping=aes(x=feed, y=weight, fill=feed))+geom_boxplot()+g
 
 YOUR TURN:
 
-Consider the iris dataset, which comes with base R.
+Consider the "iris" dataset, which comes with base R.
 
 This famous (Fisher's or Anderson's) iris data set gives the measurements in centimeters of the variables sepal length and width and petal length and width, respectively, for 50 flowers from each of 3 species of iris. The species are Iris setosa, versicolor, and virginica.
 
@@ -366,8 +366,15 @@ summary(res.aov)
 ```
 
 
+Let's try running a t-test, using a dataset in Google Drive:
 
-Perhaps do the same with mpg?
+* Visit the file here: https://docs.google.com/spreadsheets/d/12yThFnz5aEUbZ_FU__RP68XRQhLyYdNJlHotaWgOpqc/edit?usp=sharing
+* Feel free to add entries to this sheet
+* Download as CSV file
+* Upload the file in your RStudio Server Files area
+* rename if necessary to "favnums.csv"
+
+Below, we'll load the data, create some variables for each column of data, and then run the t-test.
 
 ```{r}
 
@@ -379,7 +386,6 @@ g1<-favs$'fav1-10'
 g2<-favs$'fav21-30'
 
 
-
 t.test(g1, g2)
 
 ```
@@ -388,9 +394,9 @@ t.test(g1, g2)
 
 
 
-### "Final Project"
+### Optional Final Project
 
-It's now your turn to make a data visualization! 
+It's now your turn to make a data visualization. 
 
 
 Some options include (but are not limited to):  
