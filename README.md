@@ -20,11 +20,11 @@ After running the command above, you'll be prompted whether to download to your 
 
 * Visit https://rstudio.cloud, and sign in with your google account  
 * Click the arrow next to "New Project", and select "from Github Repository"
-* Enter the url: https://github.com/jeremymcwilliams/ggplot-workshop
+* Enter the url: https://github.com/jeremymcwilliams/ggplot-workshop-jan20
 * Once the project loads, run `install.packages("tidyverse")` in the console.
 
 
-#### To get started, click "ggplot-handout.Rmd" in the files window, and then minimize the console window.
+#### To get started, click "workshop-notebook.Rmd" in the files window, and then minimize the console window.
 
 
 

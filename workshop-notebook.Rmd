@@ -51,8 +51,10 @@ As always, entering your question or error message into your favorite search eng
 
 ### Baby Names data set
 
+In our Files section, we have a dataset called babyNames.csv. This dataset is from the Social Security Administration, and shows the number of times each unique baby name was given in the US, from 1960-2017.
 
-Load data set
+First let's load this dataset, and take a look at it:
+
 ```{r}
 babyNames<-read_csv("babyNames.csv")
 
@@ -108,13 +110,15 @@ Bonus! Can you find and plot a name for which the use is increasing over time?
 
 
 
-Area Plots!
+
 
 We can change our plot type:
 
 ```{r}
 
 ggplot(data=mary, aes(x=Year, y=Count))+geom_area()
+
+ggplot(data=mary, aes(x=Year, y=Count))+geom_point()
 
 ```
 
@@ -209,13 +213,12 @@ Now that we have a subset of data, let's create a line plot:
 
 ggplot(data=usMen, mapping=aes(x=Year, y=Height))+geom_line()
 
-# Now take a look at the ggplot cheat sheet. Try changing geom_line() to a different "geom". Any success?
 
 
 ```
 
 
-Now let's compare multiple countries at once. 
+Now let's compare multiple countries at once. We can use the "or" operater | in the filter function to return data for multiple countries:
 
 ```{r}
 
@@ -366,47 +369,23 @@ summary(res.aov)
 
 Perhaps do the same with mpg?
 
-
-
-
-
 ```{r}
 
-ggplot(data=chickwts, mapping=aes(x=feed, y=weight, fill=feed))+geom_boxplot()
+favs=read_csv("favnum.csv")
+
+favs
+
+g1<-favs$'fav1-10'
+g2<-favs$'fav21-30'
+
+
+
+t.test(g1, g2)
 
 ```
 
 
 
-
-
-```{r}
-
-Iris_summary <- iris %>% # the names of the new data frame and the data frame to be summarised
-  group_by(Species) %>%   # the grouping variable
-  summarise(mean_PL = mean(Petal.Length),  # calculates the mean of each group
-            sd_PL = sd(Petal.Length), # calculates the standard deviation of each group
-            n_PL = n(),  # calculates the sample size per group
-            SE_PL = sd(Petal.Length)/sqrt(n())) # calculates the standard error of each group
-
-Iris_summary
-
-```
-
-
-
-```{r}
-jpeg("rplot.jpg")
-
-IrisPlot <- ggplot(Iris_summary, aes(x=Species, y=mean_PL, fill=Species)) + 
-                   geom_col() +  
-                   geom_errorbar(aes(ymin = mean_PL - sd_PL, ymax = mean_PL + sd_PL), width=0.2)
-
-IrisPlot + labs(y="Petal length (cm) ± s.d.", x = "Species")
-
-dev.off()
-
-```
 
 
 ### "Final Project"
