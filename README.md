@@ -1,7 +1,7 @@
 # ggplot-workshop-jan20
 ggplot workshop for faculty &amp; staff, January 15th, 2020
 
-Link to this page: http://bit.ly/R-lc-ggplot
+Link to this page: http://bit.ly/R-LC-ggplot
 
 ### For use with Lewis & Clark's RStudio Server
 
